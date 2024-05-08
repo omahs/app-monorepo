@@ -7,6 +7,7 @@ import {
 } from '@onekeyhq/shared/src/consts/dbConsts';
 import {
   IMPL_ADA,
+  IMPL_ALGO,
   IMPL_BCH,
   IMPL_BTC,
   IMPL_COSMOS,
@@ -87,6 +88,7 @@ export async function createVaultInstance(options: IVaultOptions) {
     [IMPL_BCH]: () => import('./impls/bch/Vault') as any,
     [IMPL_LTC]: () => import('./impls/ltc/Vault') as any,
     [IMPL_SOL]: () => import('./impls/sol/Vault') as any,
+    [IMPL_ALGO]: () => import('./impls/algo/Vault') as any,
     [IMPL_COSMOS]: () => import('./impls/cosmos/Vault') as any,
     [IMPL_TRON]: () => import('./impls/tron/Vault') as any,
     [IMPL_NEAR]: () => import('./impls/near/Vault') as any,

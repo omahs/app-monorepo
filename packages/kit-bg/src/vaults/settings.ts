@@ -1,5 +1,6 @@
 import {
   IMPL_ADA,
+  IMPL_ALGO,
   IMPL_BCH,
   IMPL_BTC,
   IMPL_COSMOS,
@@ -60,6 +61,7 @@ export async function getVaultSettings({ networkId }: { networkId: string }) {
     [IMPL_DOGE]: () => import('./impls/doge/settings'),
     [IMPL_BCH]: () => import('./impls/bch/settings'),
     [IMPL_LTC]: () => import('./impls/ltc/settings'),
+    [IMPL_ALGO]: () => import('./impls/algo/settings'),
     [IMPL_COSMOS]: () => import('./impls/cosmos/settings'),
     [IMPL_NEAR]: () => import('./impls/near/settings'),
     [IMPL_TRON]: () => import('./impls/tron/settings'),
