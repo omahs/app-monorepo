@@ -1,11 +1,25 @@
-import { useCallback, useContext, useMemo, useRef, useState } from 'react';
+import {
+  useCallback,
+  useContext,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from 'react';
 
 import { InteractionManager } from 'react-native';
 import { useMedia, withStaticProperties } from 'tamagui';
 
 import { Popover, Trigger } from '../../actions';
 import { ListView, SectionList } from '../../layouts';
-import { Heading, Icon, SizableText, Stack, XStack } from '../../primitives';
+import {
+  Heading,
+  Icon,
+  SizableText,
+  Stack,
+  View,
+  XStack,
+} from '../../primitives';
 import { Input } from '../Input';
 
 import { SelectContext } from './context';
@@ -20,6 +34,7 @@ import type {
   ISelectTriggerProps,
 } from './type';
 import type { IListViewProps, ISectionListProps } from '../../layouts';
+import type { LayoutChangeEvent } from 'react-native';
 
 const useTriggerLabel = (value: string) => {
   const { selectedItemRef, sections, items } = useContext(SelectContext);
@@ -244,6 +259,80 @@ function SelectContent() {
     [],
   );
 
+  const listRef = useRef<any>();
+  const isFirstOpen = useRef(true);
+
+  const isListShown = useRef(false);
+  const onLayout = useCallback((e: LayoutChangeEvent) => {
+    if (e.nativeEvent.layout.height) {
+      isListShown.current = true;
+    }
+  }, []);
+
+  const handleFirstScrollToIndex = useCallback(
+    (times = 0) => {
+      if (times > 20) {
+        return;
+      }
+      console.log('times===', times);
+      if (!sections && !items) {
+        return;
+      }
+      if (!isListShown.current) {
+        setTimeout(() => {
+          handleFirstScrollToIndex(times + 1);
+        }, 20);
+      }
+      setTimeout(() => {
+        if (sections) {
+          let itemIndex = -1;
+          let sectionIndex = -1;
+          for (
+            sectionIndex = 0;
+            sectionIndex < sections.length;
+            sectionIndex += 1
+          ) {
+            itemIndex = sections[sectionIndex].data.findIndex(
+              (i) => i.value === selectedItemRef.current.value,
+            );
+            if (itemIndex !== -1) {
+              break;
+            }
+          }
+
+          if (itemIndex !== -1) {
+            // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-call
+            listRef.current.scrollToLocation({
+              sectionIndex,
+              itemIndex,
+            });
+          }
+        } else {
+          const index = items?.findIndex(
+            (i) => i.value === selectedItemRef.current.value,
+          );
+          if (index !== -1) {
+            // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-call
+            listRef.current.scrollToIndex({
+              index,
+              animated: true,
+            });
+          }
+        }
+
+        isFirstOpen.current = false;
+      });
+    },
+    [items, sections, selectedItemRef],
+  );
+
+  useEffect(() => {
+    if (isOpen && isFirstOpen.current) {
+      handleFirstScrollToIndex();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isOpen]);
+
   const renderContent = useMemo(
     () => {
       const listProps = {
@@ -259,9 +348,12 @@ function SelectContent() {
           minHeight: '$7',
         },
       };
+
       return sections ? (
         <SectionList
+          ref={listRef}
           sections={sections}
+          onLayout={onLayout}
           renderSectionHeader={renderSectionHeader}
           {...(listProps as Omit<
             ISectionListProps<any>,
@@ -270,6 +362,8 @@ function SelectContent() {
         />
       ) : (
         <ListView
+          ref={listRef}
+          onLayout={onLayout}
           data={items}
           {...(listProps as Omit<IListViewProps<ISelectItem>, 'data'>)}
         />
