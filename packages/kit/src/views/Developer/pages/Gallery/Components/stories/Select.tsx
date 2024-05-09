@@ -55,7 +55,7 @@ const SelectDefaultItem = () => {
 };
 
 const SelectLongListItem = () => {
-  const [val, setVal] = useState('Apple');
+  const [val, setVal] = useState('102');
 
   return (
     <Select
