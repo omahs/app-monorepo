@@ -274,7 +274,6 @@ function SelectContent() {
       if (times > 20) {
         return;
       }
-      console.log('times===', times);
       if (!sections && !items) {
         return;
       }
