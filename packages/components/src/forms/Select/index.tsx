@@ -312,7 +312,6 @@ function SelectContent() {
             (i) => i.value === selectedItemRef.current.value,
           );
           if (index !== -1) {
-            console.log(index);
             // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-call
             listRef.current.scrollToIndex({
               index,
