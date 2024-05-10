@@ -7,7 +7,7 @@ import {
   useState,
 } from 'react';
 
-import { InteractionManager } from 'react-native';
+import { InteractionManager, useWindowDimensions } from 'react-native';
 import { useMedia, withStaticProperties } from 'tamagui';
 
 import { Popover, Trigger } from '../../actions';
@@ -304,6 +304,7 @@ function SelectContent() {
             listRef.current.scrollToLocation({
               sectionIndex,
               itemIndex,
+              animated: false,
             });
           }
         } else {
@@ -311,10 +312,11 @@ function SelectContent() {
             (i) => i.value === selectedItemRef.current.value,
           );
           if (index !== -1) {
+            console.log(index);
             // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-call
             listRef.current.scrollToIndex({
               index,
-              animated: true,
+              animated: false,
             });
           }
         }
@@ -332,6 +334,8 @@ function SelectContent() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isOpen]);
 
+  const { height: windowHeight } = useWindowDimensions();
+
   const renderContent = useMemo(
     () => {
       const listProps = {
@@ -339,6 +343,7 @@ function SelectContent() {
         estimatedItemSize: '$6',
         extraData: value,
         renderItem,
+        maxHeight: windowHeight / 2,
         p: '$1',
         $md: {
           p: '$3',
@@ -346,11 +351,12 @@ function SelectContent() {
           // minHeight is 2 * $3 + $1(2px)
           minHeight: '$7',
         },
+        ref: listRef,
+        onLayout,
       };
 
       return sections ? (
         <SectionList
-          ref={listRef}
           sections={sections}
           onLayout={onLayout}
           renderSectionHeader={renderSectionHeader}
@@ -361,8 +367,6 @@ function SelectContent() {
         />
       ) : (
         <ListView
-          ref={listRef}
-          onLayout={onLayout}
           data={items}
           {...(listProps as Omit<IListViewProps<ISelectItem>, 'data'>)}
         />

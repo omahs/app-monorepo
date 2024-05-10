@@ -55,7 +55,7 @@ const SelectDefaultItem = () => {
 };
 
 const SelectLongListItem = () => {
-  const [val, setVal] = useState('102');
+  const [val, setVal] = useState('501');
 
   return (
     <Select
@@ -119,19 +119,46 @@ const sections: ISelectSection[] = [
         value: 'Apple',
         leading: <SizableText size="$bodyMdMedium">😀</SizableText>,
       },
-
       {
         label: 'Pear🌰',
         value: 'Pear',
         leading: <SizableText size="$bodyMdMedium">🚅</SizableText>,
       },
-
+      {
+        label: 'Pear🌰1',
+        value: 'Pear1',
+        leading: <SizableText size="$bodyMdMedium">🚅</SizableText>,
+      },
+      {
+        label: 'Pear🌰2',
+        value: 'Pear2',
+        leading: <SizableText size="$bodyMdMedium">🚅</SizableText>,
+      },
+      {
+        label: 'Pear🌰3',
+        value: 'Pear3',
+        leading: <SizableText size="$bodyMdMedium">🚅</SizableText>,
+      },
+      {
+        label: 'Pear🌰4',
+        value: 'Pear4',
+        leading: <SizableText size="$bodyMdMedium">🚅</SizableText>,
+      },
+      {
+        label: 'Pear🌰5',
+        value: 'Pear5',
+        leading: <SizableText size="$bodyMdMedium">🚅</SizableText>,
+      },
+      {
+        label: 'Pear🌰6',
+        value: 'Pear6',
+        leading: <SizableText size="$bodyMdMedium">🚅</SizableText>,
+      },
       {
         label: 'Blackberry🫐',
         value: 'Blackberry',
         leading: <SizableText size="$bodyMdMedium">🚆</SizableText>,
       },
-
       {
         label: 'Peach🍑',
         value: 'Peach',
@@ -156,7 +183,7 @@ const sections: ISelectSection[] = [
 ];
 
 const SelectSectionsItemDemo = () => {
-  const [val, setVal] = useState('Apple');
+  const [val, setVal] = useState('Blackberry');
   return (
     <Select
       sections={sections}
