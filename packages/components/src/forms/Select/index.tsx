@@ -7,19 +7,14 @@ import {
   useState,
 } from 'react';
 
-import { InteractionManager, useWindowDimensions } from 'react-native';
+import { InteractionManager } from 'react-native';
 import { useMedia, withStaticProperties } from 'tamagui';
+
+import platformEnv from '@onekeyhq/shared/src/platformEnv';
 
 import { Popover, Trigger } from '../../actions';
 import { ListView, SectionList } from '../../layouts';
-import {
-  Heading,
-  Icon,
-  SizableText,
-  Stack,
-  View,
-  XStack,
-} from '../../primitives';
+import { Heading, Icon, SizableText, Stack, XStack } from '../../primitives';
 import { Input } from '../Input';
 
 import { SelectContext } from './context';
@@ -333,8 +328,6 @@ function SelectContent() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isOpen]);
 
-  const { height: windowHeight } = useWindowDimensions();
-
   const renderContent = useMemo(
     () => {
       const listProps = {
@@ -342,7 +335,7 @@ function SelectContent() {
         estimatedItemSize: '$6',
         extraData: value,
         renderItem,
-        maxHeight: windowHeight / 2,
+        maxHeight: platformEnv.isNative ? undefined : '60vh',
         p: '$1',
         $md: {
           p: '$3',
